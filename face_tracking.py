@@ -45,7 +45,7 @@ while True:
             y = box[1] + ( box[3] // 2 ) # Center of face
 
             centerOfCircle = (x, y)
-            image = cv2.circle(frame, centerOfCircle, radius = 1, color = (0, 0, 255), thickness = -1)
+            image = cv2.circle(frame, centerOfCircle, radius = 50, color = (0, 0, 255), thickness = -1)
 
             
     # Display the frame
