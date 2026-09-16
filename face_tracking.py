@@ -1,11 +1,15 @@
 import cv2
 from picamera2 import Picamera2
 
+# Variable for width and height in pixels
+resolutionWidth = 640
+resolutionHeight = 480
+
 # 1. Initialize the modern Raspberry Pi camera module
 picam2 = Picamera2()
 
-# Configure it for OpenCV's preferred format (BGR) and a 640x480 resolution
-picam2.configure(picam2.create_video_configuration(main={"format": 'BGR888', "size": (640, 480)}))
+# Configure it for OpenCV's preferred format (BGR) and the specified size
+picam2.configure(picam2.create_video_configuration(main={"format": 'BGR888', "size": (resolutionWidth, resolutionHeight)}))
 picam2.start()
 
 # Load OpenCV's built-in deep learning face detector (YuNet)
@@ -13,7 +17,7 @@ picam2.start()
 detector = cv2.FaceDetectorYN.create(
     model='face_detection_yunet.onnx',
     config='',
-    input_size=(640, 480),
+    input_size=(resolutionWidth, resolutionHeight),
     score_threshold=0.6
 )
 
@@ -28,8 +32,8 @@ while True:
     status, faces = detector.detect(frame)
 
     # 4. Draw bounding boxes and landmarks
-    if faces is not None:
-        for face in faces:
+    if faces is not None: # Check that there is a face available
+        for face in faces: # Loop through alla faces
             box = list(map(int, face[:4]))
             cv2.rectangle(frame, (box[0], box[1]), (box[0]+box[2], box[1]+box[3]), (0, 255, 0), 2)
             
@@ -37,6 +41,13 @@ while True:
             for i in range(5):
                 cv2.circle(frame, (landmarks[2*i], landmarks[2*i+1]), 2, (0, 0, 255), -1)
 
+            x = box[0] + ( box[2] // 2 ) # Center of face
+            y = box[1] + ( box[3] // 2 ) # Center of face
+
+            centerOfCircle = (x, y)
+            image = cv2.circle(frame, centerOfCircle, radius = 1, color = (0, 0, 255), thickness = -1)
+
+            
     # Display the frame
     cv2.imshow('Modern Pi Camera Face Tracking', frame)
 
