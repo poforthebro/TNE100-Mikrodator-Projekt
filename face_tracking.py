@@ -2,8 +2,8 @@ import cv2
 from picamera2 import Picamera2
 
 # Variable for width and height in pixels
-resolutionWidth = 640
-resolutionHeight = 480
+resolutionWidth = 1920
+resolutionHeight = 1080
 
 # 1. Initialize the modern Raspberry Pi camera module
 picam2 = Picamera2()
