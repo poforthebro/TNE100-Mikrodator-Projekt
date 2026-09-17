@@ -3,8 +3,8 @@ from picamera2 import Picamera2
 
 
 # Variable for width and height in pixels that is used for video stream
-streamResWidth = 1080
-streamResHeight = 1920
+streamResWidth = 1920
+streamResHeight = 1080
 
 # Variable for width and height in pixels that is used by the ML algorithms
 MLresWidth = 640
@@ -72,7 +72,7 @@ def run_tracker(on_target_update):
     # Configure camera to create both a high res and a lores stream
     config = picam2.create_video_configuration(
         main={"format": 'BGR888', "size": (streamResWidth, streamResHeight)},
-        lores={"format": 'BGR888', "size": (MLresWidth, MLresHeight)}
+        lores={"format": 'YUV420', "size": (MLresWidth, MLresHeight)}
         )
         
     picam2.configure(config)
@@ -93,6 +93,9 @@ def run_tracker(on_target_update):
         request = picam2.capture_request()
         high_res_frame = request.make_array("main")
         ml_frame = request.make_array("lores")
+
+        # Convert the YUV420 hardware stream into a BGR image for OpenCV
+        ml_frame = cv2.cvtColor(ml_frame, cv2.COLOR_YUV2BGR_I420)
 
     # Flip both
         high_res_frame = cv2.flip(high_res_frame, 1)
