@@ -119,8 +119,8 @@ def run_tracker(on_target_update):
             on_target_update(delta[0], delta[1])
 
             score = int(get_quality_score(best_face))
-            cv2.putText(high_res_frame, f"Score: {score}", (int(best_face_coord[0] * scale_x), int() (best_face_coord[1] - 10) * scale_y) ), 
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(high_res_frame, f"Score: {score}", (int(best_face_coord[0] * scale_x), int( (best_face_coord[1] - 10) * scale_y) ), 
+            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
             draw_circle_face(high_res_frame, small_x, small_y)
 
