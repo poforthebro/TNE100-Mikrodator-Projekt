@@ -1,9 +1,9 @@
 import cv2
 from picamera2 import Picamera2
 
-    # Variable for width and height in pixels
-    resolutionWidth = 640
-    resolutionHeight = 480
+# Variable for width and height in pixels
+resolutionWidth = 640
+resolutionHeight = 480
 
 # Function to calculate quality of each face
 def get_quality_score(face):
