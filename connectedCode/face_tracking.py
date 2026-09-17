@@ -1,9 +1,20 @@
 import cv2
 from picamera2 import Picamera2
 
-# Variable for width and height in pixels
-resolutionWidth = 640
-resolutionHeight = 480
+
+# Variable for width and height in pixels that is used for video stream
+streamResWidth = 1080
+streamResHeight = 1920
+
+# Variable for width and height in pixels that is used by the ML algorithms
+MLresWidth = 640
+MLresHeight = 480
+
+# Scale coordinates
+scale_x = streamResWidth / MLresWidth
+scale_y = streamResHeight / MLresHeight
+
+
 
 # Function to calculate quality of each face
 def get_quality_score(face):
@@ -18,14 +29,22 @@ def get_quality_score(face):
 
 # Calculate face distance from center of screen in x and y
 def get_delta_xy(x, y):
-    deltaX = (resolutionWidth // 2) - x
-    deltaY = (resolutionHeight // 2) - y
+    deltaX = (MLresWidth // 2) - x
+    deltaY = (MLresHeight // 2) - y
     return (deltaX, deltaY)
 
 # draw a rectangle around a face
 def draw_rectangle(frame, face):
     box = list(map(int, face[:4]))
-    cv2.rectangle(frame, (box[0], box[1]), (box[0]+box[2], box[1]+box[3]), (0, 255, 0), 2)
+
+    small_x, small_y, small_w, small_h = box[0], box[1], box[2], box[3]
+
+    big_x = int(small_x * scale_x)
+    big_y = int(small_y * scale_y)
+    big_w = int(small_w * scale_x)
+    big_h = int(small_h * scale_y)
+
+    cv2.rectangle(frame, (big_x, big_y), (big_w + big_x, big_h + big_y), (0, 255, 0), 2)
     
     landmarks = list(map(int, face[4:14]))
 
@@ -38,8 +57,10 @@ def draw_rectangle(frame, face):
 
 # Draw Circle in middle of best face
 def draw_circle_face(frame, x, y):
+    big_x = int(x * scale_x)
+    big_y = int(y * scale_y)
 
-    centerOfCircle = (x, y) 
+    centerOfCircle = (big_x, big_y) 
     image = cv2.circle(frame, centerOfCircle, radius = 10, color = (0, 0, 255), thickness = -1)
 
 # Function that continously maps face coordinates
@@ -48,8 +69,13 @@ def run_tracker(on_target_update):
     # 1. Initialize the modern Raspberry Pi camera module
     picam2 = Picamera2()
 
-    # Configure it for OpenCV's preferred format (BGR) and the specified size
-    picam2.configure(picam2.create_video_configuration(main={"format": 'BGR888', "size": (resolutionWidth, resolutionHeight)}))
+    # Configure camera to create both a high res and a lores stream
+    config = picam2.create_video_configuration(
+        main={"format": 'BGR888', "size": (streamResWidth, streamResHeight)},
+        lores={"format": 'BGR888', "size": (MLresWidth, MLresHeight)}
+        )
+        
+    picam2.configure(config)
     picam2.start()
 
     # Load OpenCV's built-in deep learning face detector (YuNet)
@@ -57,20 +83,23 @@ def run_tracker(on_target_update):
     detector = cv2.FaceDetectorYN.create(
         model='face_detection_yunet.onnx',
         config='',
-        input_size=(resolutionWidth, resolutionHeight),
+        input_size=(MLresWidth, MLresHeight),
         score_threshold=0.6
     )
 
 
     while True:
-        # 2. Capture a frame directly from Picamera2
-        frame = picam2.capture_array()
+    # Grab both frames from the hardware
+        request = picam2.capture_request()
+        high_res_frame = request.make_array("main")
+        ml_frame = request.make_array("lores")
 
-        # Mirror flip the frame for a more natural view
-        frame = cv2.flip(frame, 1)
+    # Flip both
+        high_res_frame = cv2.flip(high_res_frame, 1)
+        ml_frame = cv2.flip(ml_frame, 1)
 
         # 3. Detect faces
-        status, faces = detector.detect(frame)
+        status, faces = detector.detect(ml_frame)
 
         # 4. Draw bounding boxes and landmarks
         if faces is not None: # Check that there is a face available
@@ -79,29 +108,29 @@ def run_tracker(on_target_update):
 
             best_face = faces[0]
             best_face_coord = list(map(int, best_face[:4]))
-            x = best_face_coord[0] + ( best_face_coord[2] // 2 ) # Center of face
-            y = best_face_coord[1] + ( best_face_coord[3] // 2 ) # Center of face
+            small_x = best_face_coord[0] + ( best_face_coord[2] // 2 ) # Center of face
+            small_y = best_face_coord[1] + ( best_face_coord[3] // 2 ) # Center of face
         
-            delta = get_delta_xy(x, y)
-            cv2.putText(frame, f"Delta X: {delta[0]}, Delta Y: {delta[1]}", (10, 30), 
+            delta = get_delta_xy(small_x, small_y)
+            cv2.putText(high_res_frame, f"Delta X: {delta[0]}, Delta Y: {delta[1]}", (10, 30), 
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
             # This line sends the delta values to the action.py file
             on_target_update(delta[0], delta[1])
 
             score = int(get_quality_score(best_face))
-            cv2.putText(frame, f"Score: {score}", (best_face_coord[0], best_face_coord[1] - 10), 
+            cv2.putText(high_res_frame, f"Score: {score}", (int(best_face_coord[0] * scale_x), int() (best_face_coord[1] - 10) * scale_y) ), 
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-            draw_circle_face(frame, x, y)
+            draw_circle_face(high_res_frame, small_x, small_y)
 
             # Square around all faces
             for face in faces: # Loop through alla faces
-                draw_rectangle(frame, face)
+                draw_rectangle(high_res_frame, face)
 
                 
         # Display the frame
-        cv2.imshow('Modern Pi Camera Face Tracking', frame)
+        cv2.imshow('Modern Pi Camera Face Tracking', high_res_frame)
 
         # ESC to exit
         if cv2.waitKey(5) & 0xFF == 27:
