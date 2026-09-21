@@ -5,6 +5,6 @@ class delta():
         self.middle_height = ML_height // 2
 
     def get_delta(self, x, y):
-        delta = (self.middle_width - x, self.middle_height - y)
+        delta = (int(self.middle_width - x), int(self.middle_height - y))
 
         return delta
