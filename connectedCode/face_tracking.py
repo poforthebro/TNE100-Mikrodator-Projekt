@@ -7,8 +7,8 @@ streamResWidth = 1920
 streamResHeight = 1080
 
 # Variable for width and height in pixels that is used by the ML algorithms
-MLresWidth = 640
-MLresHeight = 480
+MLresWidth = 320
+MLresHeight = 240
 
 # Scale coordinates
 scale_x = streamResWidth / MLresWidth
@@ -84,7 +84,7 @@ def run_tracker(on_target_update):
         model='face_detection_yunet.onnx',
         config='',
         input_size=(MLresWidth, MLresHeight),
-        score_threshold=0.6
+        score_threshold=0.3
     )
 
 
