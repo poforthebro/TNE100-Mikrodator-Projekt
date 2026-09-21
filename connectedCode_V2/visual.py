@@ -62,8 +62,11 @@ def draw_rectangle(frame, face, scale_x, scale_y):
 
 # Draw Circle in middle of best face
 def draw_circle_face(frame, coordinates, scale_x, scale_y):
-    big_x = int(coordinates[0] * scale_x)
-    big_y = int(coordinates[1] * scale_y)
+    small_x = coordinates[0] + ( coordinates[2] // 2 )
+    small_y = coordinates[1] + ( coordinates[3] // 2 )
+
+    big_x = int(small_x * scale_x)
+    big_y = int(small_y * scale_y)
 
     centerOfCircle = (big_x, big_y) 
     image = cv2.circle(frame, centerOfCircle, radius = 10, color = (0, 0, 255), thickness = -1)
