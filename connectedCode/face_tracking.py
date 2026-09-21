@@ -88,6 +88,7 @@ def run_tracker(on_target_update):
     )
 
 
+# ////////////////////
     while True:
     # Grab both frames from the hardware
         request = picam2.capture_request()
@@ -105,7 +106,7 @@ def run_tracker(on_target_update):
         ml_frame = cv2.flip(ml_frame, 1)
 
         # 3. Detect faces
-        status, faces = detector.detect(ml_frame)
+        
 
         # 4. Draw bounding boxes and landmarks
         if faces is not None: # Check that there is a face available
@@ -145,3 +146,6 @@ def run_tracker(on_target_update):
     # Clean up resources safely
     picam2.stop()
     cv2.destroyAllWindows()
+
+
+# /////////////
