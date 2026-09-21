@@ -11,11 +11,11 @@ class camera:
 
         # Configure the two different streams and their respective settings
         config = self.picam2.create_video_configuration(
-            main = {"format": "BGR88", "size": (streamResWidth, streamResHeight) }, 
+            main = {"format": "BGR888", "size": (streamResWidth, streamResHeight) }, 
             lores = {"format": "YUV420", "size": (MLresWidth, MLresHeight) }
         )
 
-        self.picam2.configure(config) # Is self really needed here?
+        self.picam2.configure(config)
         
         self.picam2.start()
         print("Camera has started")
