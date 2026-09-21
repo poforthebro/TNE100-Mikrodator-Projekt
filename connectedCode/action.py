@@ -10,7 +10,7 @@ def run_motor_worker(data_queue):
             print(f"Starting motor movement to X:{delta_x} Y:{delta_y}...")
             
             # Simulate a slow motor movement (e.g., takes 2 seconds)
-            # time.sleep(1) 
+             time.sleep(2) 
             
             print("Motor movement complete!")
             
