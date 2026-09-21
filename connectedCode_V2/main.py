@@ -45,7 +45,7 @@ while True:
     faces, quality = face_tracker.get_faces(frames[0])
     if faces is not None:
         best_face = faces[0] # The face vector is sorted based on quality already, The first one is the best
-        deltaArray = Delta.get_delta(best_face[0], best_face[1])
+        deltaArray = Delta.get_delta(best_face)
         active_quality = quality
 
         data_queue.send_to_queue(deltaArray)
