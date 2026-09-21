@@ -94,6 +94,9 @@ def run_tracker(on_target_update):
         high_res_frame = request.make_array("main")
         ml_frame = request.make_array("lores")
 
+        #Realease the DSP in the camera to make it available again.
+        request.release()
+
         # Convert the YUV420 hardware stream into a BGR image for OpenCV
         ml_frame = cv2.cvtColor(ml_frame, cv2.COLOR_YUV2BGR_I420)
 
