@@ -7,9 +7,9 @@ servo = Servo(25)
 try:
     # Your servo control code goes here
     servo.min()
-    sleep(1000)
+    sleep(1)
     servo.max()
-    sleep(1000)
+    sleep(1)
     
 finally:
     # This executes no matter what, freeing the pin
