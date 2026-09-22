@@ -1,16 +1,19 @@
 from gpiozero import Servo
+from gpiozero.pins.pigpio import PiGPIOFactory
 from time import sleep
 
-# Initialize outside the try block
-servo = Servo(25)
+# 1. Initialize the pigpio factory
+factory = PiGPIOFactory()
+
+# 2. explicitly assign the factory to the servo
+servo = Servo(25, pin_factory=factory)
 
 try:
-    # Your servo control code goes here
     servo.min()
     sleep(1)
     servo.max()
     sleep(1)
     
 finally:
-    # This executes no matter what, freeing the pin
+    # 3. Ensure the pin is always released, even on crash
     servo.close()
