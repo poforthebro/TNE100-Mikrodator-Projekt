@@ -2,18 +2,24 @@ from gpiozero import Servo
 from gpiozero.pins.pigpio import PiGPIOFactory
 from time import sleep
 
-# 1. Initialize the pigpio factory
+# Initialize the factory and servo
 factory = PiGPIOFactory()
-
-# 2. explicitly assign the factory to the servo
 servo = Servo(18, pin_factory=factory)
 
 try:
-    servo.min()
-    sleep(1)
-    servo.max()
-    sleep(1)
+    print("Sweeping servo... Press Ctrl+C to stop.")
+    
+    # This loop runs forever until interrupted
+    while True:
+        servo.min()
+        sleep(1)
+        servo.max()
+        sleep(1)
+
+except KeyboardInterrupt:
+    # Catches the Ctrl+C command silently without throwing an ugly error
+    print("\nStopping the servo.")
     
 finally:
-    # 3. Ensure the pin is always released, even on crash
+    # Guarantees the pin is released when the script ends
     servo.close()
