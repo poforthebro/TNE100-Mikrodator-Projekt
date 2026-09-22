@@ -6,7 +6,7 @@ from time import sleep
 factory = PiGPIOFactory()
 
 # 2. explicitly assign the factory to the servo
-servo = Servo(25, pin_factory=factory)
+servo = Servo(18, pin_factory=factory)
 
 try:
     servo.min()
