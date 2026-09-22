@@ -6,6 +6,17 @@ from time import sleep
 factory = PiGPIOFactory()
 servo = Servo(18, pin_factory=factory)
 
+current_servo_pos = 0.0 
+servo.value = current_servo_pos
+
+Kp = 0.002
+DEADZONE = 15
+if abs(delta_y) > DEADZONE:
+    adjustment = Kp * delta_y
+    ls
+    current_servo_pos = max(-1.0, min(1.0, current_servo_pos))
+    servo.value = current_servo_pos
+    
 try:
     print("Sweeping servo... Press Ctrl+C to stop.")
     
