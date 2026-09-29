@@ -1,8 +1,6 @@
 import cv2
 
 
-
-
 class face_tracking():
 
     # Define and initilize each use of the class with these settings
