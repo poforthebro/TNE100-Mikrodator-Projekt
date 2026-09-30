@@ -14,9 +14,10 @@ def run_motor_worker(data_queue):
     
     # 2. Control System Parameters
     Kp = 0.002                 # Gain: Fraction of delta_y to move per frame'
-    Kp_motor = 0.005           # Gain for motor speed adjustment
+    Kp_motor = 0.0015           # Gain for motor speed adjustment
     DEADZONE = 15              # Threshold: Ignore tiny pixel movements
     current_servo_pos_y = 1  # Center position   
+    MAX_MOTOR_SPEED = 0.35
     
     # Center the servo on startup
     servo_y.value = current_servo_pos_y
@@ -40,7 +41,7 @@ def run_motor_worker(data_queue):
                 servo_y.value = current_servo_pos_y
             if abs(delta_x) > DEADZONE:
                 speed = delta_x * Kp_motor
-                speed = max(-0.3, min(0.3, speed))
+                speed = max(-MAX_MOTOR_SPEED, min(MAX_MOTOR_SPEED, speed))
                 if speed > 0:
                     motor.forward(speed)
                 elif speed < 0:
