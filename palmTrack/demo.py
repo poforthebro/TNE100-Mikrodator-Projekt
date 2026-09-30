@@ -283,13 +283,15 @@ if __name__ == '__main__':
     palm_detector = MPPalmDet(modelPath=palm_model_path,
                               nmsThreshold=0.3,
                               scoreThreshold=0.6,
-                              backendId=backend_id,
-                              targetId=target_id)
+                             # backendId=backend_id,
+                             # targetId=target_id
+                             )
     # handpose detector
     handpose_detector = MPHandPose(modelPath=args.model,
                                    confThreshold=args.conf_threshold,
-                                   backendId=backend_id,
-                                   targetId=target_id)
+                                 #  backendId=backend_id,
+                                 #  targetId=target_id
+                                 )
 
     # If input is an image
     if args.input is not None:
