@@ -13,10 +13,10 @@ def run_motor_worker(data_queue):
     motor = PhaseEnableMotor(phase=26,enable=13)
     
     # 2. Control System Parameters
-    Kp = 0.002                 # Gain: Fraction of delta_y to move per frame
+    Kp = 0.002                 # Gain: Fraction of delta_y to move per frame'
+    Kp_motor = 0.005           # Gain for motor speed adjustment
     DEADZONE = 15              # Threshold: Ignore tiny pixel movements
-    current_servo_pos_y = 0.0  # Center position
-    current_motor_speed = 0.5         # Initial motor speed (not used in this snippet)
+    current_servo_pos_y = 0.5  # Center position   
     
     # Center the servo on startup
     servo_y.value = current_servo_pos_y
@@ -28,8 +28,6 @@ def run_motor_worker(data_queue):
             
             # 3. Apply the Control Logic to the Y-axis
             if abs(delta_y) > DEADZONE:
-                
-                # Multiply the pixel error by the gain
                 adjustment = delta_y * Kp
                 
                 # Add adjustment to current position (change to '-' if it moves the wrong way)
@@ -41,23 +39,14 @@ def run_motor_worker(data_queue):
                 # Output the signal to the hardware
                 servo_y.value = current_servo_pos_y
             if abs(delta_x) > DEADZONE:
-                # Multiply the pixel error by the gain
-                adjustment = delta_x * Kp
-                
-                # Add adjustment to current position (change to '-' if it moves the wrong way)
-                current_motor_speed = current_motor_speed - adjustment
-                
-                # Clamp the value between -1.0 and 1.0 so gpiozero doesn't crash
-                current_motor_speed = max(-1.0, min(1.0, current_motor_speed))
-                
-                # Output the signal to the hardware
-                if current_motor_speed > 0:
-                    motor.forward(current_motor_speed)
-                elif current_motor_speed < 0:
-                    motor.backward(-current_motor_speed)
-                else:
-                    motor.stop()
+                speed = delta_x * Kp_motor
+                speed = max(-1.0, min(1.0, speed))
+                if speed > 0:
+                    motor.forward(speed)
+                elif speed < 0:
+                    motor.backward(-speed)
+            else:
+                motor.stop()
                 
         except queue.Empty:
-            # If the queue is empty (no face detected), just loop back and wait
             continue
