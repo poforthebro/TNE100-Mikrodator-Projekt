@@ -1,4 +1,4 @@
- import threading # Make sure we can divide code into different threads
+import threading # Make sure we can divide code into different threads
 import queue # For handling queues
 import numpy
 import cv2
