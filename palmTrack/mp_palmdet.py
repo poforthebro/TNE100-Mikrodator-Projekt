@@ -13,8 +13,9 @@ class MPPalmDet:
         self.input_size = np.array([192, 192]) # wh
 
         self.model = cv.dnn.readNet(self.model_path)
-        self.model.setPreferableBackend(self.backend_id)
-        self.model.setPreferableTarget(self.target_id)
+        # Comment these out to stop the OpenCV 5 warning:
+        # self.model.setPreferableBackend(self.backendId)
+        # self.model.setPreferableTarget(self.targetId)
 
         self.anchors = self._load_anchors()
 
