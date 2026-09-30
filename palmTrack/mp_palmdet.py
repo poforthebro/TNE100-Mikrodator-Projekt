@@ -63,15 +63,20 @@ class MPPalmDet:
         results = self._postprocess(output_blob, np.array([w, h]), pad_bias)
 
         return results
-
-    def _postprocess(self, output_blob, original_shape, pad_bias):
-        score = output_blob[1][0, :, 0]
-        box_delta = output_blob[0][0, :, 0:4]
-        landmark_delta = output_blob[0][0, :, 4:]
+    
+    def _postprocess(self, output_blob, original_shape, pad_bias):  
+        # output_blob[1] is 2D: (1, N) -> extract the first row to get 1D scores
+        score = output_blob[1][0, :] 
+        
+        # output_blob[0] is 2D: (N, 18) -> extract ALL rows (:), but split the columns
+        box_delta = output_blob[0][:, 0:4]
+        landmark_delta = output_blob[0][:, 4:]
+        
         scale = max(original_shape)
 
         # get scores
-        score = score.astype(np.float64)
+        # FIX 1: Change np.float64 to np.float32 for OpenCV compatibility
+        score = score.astype(np.float32) 
         score = 1 / (1 + np.exp(-score))
 
         # get boxes
@@ -81,10 +86,17 @@ class MPPalmDet:
         xy2 = (cxy_delta + wh_delta / 2 + self.anchors) * scale
         boxes = np.concatenate([xy1, xy2], axis=1)
         boxes -= [pad_bias[0], pad_bias[1], pad_bias[0], pad_bias[1]]
+        
         # NMS
-        keep_idx = cv.dnn.NMSBoxes(boxes, score, self.score_threshold, self.nms_threshold, top_k=self.topK)
+        # FIX 2: Add .tolist() to boxes and score so OpenCV reads them natively
+        keep_idx = cv.dnn.NMSBoxes(boxes.tolist(), score.tolist(), self.score_threshold, self.nms_threshold, top_k=self.topK)
+        
         if len(keep_idx) == 0:
             return np.empty(shape=(0, 19))
+            
+        # FIX 3: Flatten keep_idx to a 1D array to ensure smooth indexing on the next lines
+        keep_idx = np.array(keep_idx).flatten()
+        
         selected_score = score[keep_idx]
         selected_box = boxes[keep_idx]
 

@@ -36,6 +36,8 @@ class camera:
     # Flip both
         high_res_frame = cv2.flip(high_res_frame, 1)
         ml_frame = cv2.flip(ml_frame, 1)
+        high_res_frame = cv2.flip(high_res_frame, 0)
+        ml_frame = cv2.flip(ml_frame, 0)
 
         return(ml_frame, high_res_frame)
 
