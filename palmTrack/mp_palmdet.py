@@ -63,7 +63,8 @@ class MPPalmDet:
         results = self._postprocess(output_blob, np.array([w, h]), pad_bias)
 
         return results
-def _postprocess(self, output_blob, original_shape, pad_bias):
+    
+    def _postprocess(self, output_blob, original_shape, pad_bias):
         score = output_blob[1][0, :] 
         
         box_delta = output_blob[0][0, :, 0:4]
