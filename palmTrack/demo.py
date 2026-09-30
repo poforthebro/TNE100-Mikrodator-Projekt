@@ -327,15 +327,27 @@ if __name__ == '__main__':
             cv.imshow('3D HandPose Demo', view_3d)
             cv.waitKey(0)
     else:  # Omit input to call default camera
-        deviceId = 0
-        cap = cv.VideoCapture(deviceId)
+        from picamera2 import Picamera2
+        
+        print("Initializing Raspberry Pi Camera...")
+        # Initialize Picamera2
+        picam2 = Picamera2()
+        
+        # Configure resolution (640x480 is standard for solid FPS on a Pi 4)
+        picam2.preview_configuration.main.size = (640, 480)
+        picam2.preview_configuration.main.format = "RGB888"
+        picam2.preview_configuration.align()
+        picam2.configure("preview")
+        picam2.start()
 
         tm = cv.TickMeter()
+        
         while cv.waitKey(1) < 0:
-            hasFrame, frame = cap.read()
-            if not hasFrame:
-                print('No frames grabbed!')
-                break
+            # Grab frame directly from the Pi Camera module
+            frame = picam2.capture_array()
+            
+            # Picamera outputs RGB by default, but OpenCV needs BGR
+            frame = cv.cvtColor(frame, cv.COLOR_RGB2BGR)
 
             # Palm detector inference
             palms = palm_detector.infer(frame)
@@ -349,13 +361,13 @@ if __name__ == '__main__':
                 if handpose is not None:
                     hands = np.vstack((hands, handpose))
             tm.stop()
+            
             # Draw results on the input image
             frame, view_3d = visualize(frame, hands)
 
             if len(palms) == 0:
-                print('No palm detected!')
+                pass # Removed the print statement here to stop terminal spam
             else:
-                print('Palm detected!')
                 cv.putText(frame, 'FPS: {:.2f}'.format(tm.getFPS()), (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255))
 
             cv.imshow('MediaPipe Handpose Detection Demo', frame)
