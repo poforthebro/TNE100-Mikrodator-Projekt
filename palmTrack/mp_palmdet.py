@@ -25,8 +25,9 @@ class MPPalmDet:
     def setBackendAndTarget(self, backendId, targetId):
         self.backend_id = backendId
         self.target_id = targetId
-        self.model.setPreferableBackend(self.backend_id)
-        self.model.setPreferableTarget(self.target_id)
+        # Comment these out to stop the OpenCV 5 warning:
+        # self.model.setPreferableBackend(self.backendId)
+        # self.model.setPreferableTarget(self.targetId)
 
     def _preprocess(self, image):
         pad_bias = np.array([0., 0.]) # left, top

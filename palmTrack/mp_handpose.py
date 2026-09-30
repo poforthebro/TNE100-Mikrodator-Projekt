@@ -20,8 +20,9 @@ class MPHandPose:
         self.HAND_BOX_ENLARGE_FACTOR = 1.65
 
         self.model = cv.dnn.readNet(self.model_path)
-        self.model.setPreferableBackend(self.backend_id)
-        self.model.setPreferableTarget(self.target_id)
+        # Comment these out to stop the OpenCV 5 warning:
+        # self.model.setPreferableBackend(self.backendId)
+        # self.model.setPreferableTarget(self.targetId)
 
     @property
     def name(self):

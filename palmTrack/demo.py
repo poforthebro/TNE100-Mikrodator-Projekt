@@ -28,7 +28,7 @@ parser.add_argument('--input', '-i', type=str,
 parser.add_argument('--model', '-m', type=str, default='./handpose_estimation_mediapipe_2023feb.onnx',
                     help='Path to the model.')
 
-"""
+
 parser.add_argument('--backend_target', '-bt', type=int, default=0,
                     help='''Choose one of the backend-target pair to run this demo:
                         {:d}: (default) OpenCV implementation + CPU,
@@ -38,7 +38,7 @@ parser.add_argument('--backend_target', '-bt', type=int, default=0,
                         {:d}: CANN + NPU
                     '''.format(*[x for x in range(len(backend_target_pairs))]))
 
-"""
+
 
 
 parser.add_argument('--conf_threshold', type=float, default=0.9,
@@ -277,20 +277,20 @@ class GestureClassification:
         return gesture
 
 if __name__ == '__main__':
-    # backend_id = backend_target_pairs[args.backend_target][0]
-    # target_id = backend_target_pairs[args.backend_target][1]
+    backend_id = backend_target_pairs[args.backend_target][0]
+    target_id = backend_target_pairs[args.backend_target][1]
     # palm detector
     palm_detector = MPPalmDet(modelPath=palm_model_path,
                               nmsThreshold=0.3,
                               scoreThreshold=0.6,
-                             # backendId=backend_id,
-                             # targetId=target_id
+                              backendId=backend_id,
+                              targetId=target_id
                              )
     # handpose detector
     handpose_detector = MPHandPose(modelPath=args.model,
                                    confThreshold=args.conf_threshold,
-                                 #  backendId=backend_id,
-                                 #  targetId=target_id
+                                   backendId=backend_id,
+                                   targetId=target_id
                                  )
 
     # If input is an image
