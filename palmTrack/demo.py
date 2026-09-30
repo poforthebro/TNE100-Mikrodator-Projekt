@@ -277,7 +277,7 @@ class GestureClassification:
         return gesture
 
 if __name__ == '__main__':
-    backend_id = backend_target_pairs[args.backend_target][0]
+    # backend_id = backend_target_pairs[args.backend_target][0]
     target_id = backend_target_pairs[args.backend_target][1]
     # palm detector
     palm_detector = MPPalmDet(modelPath=palm_model_path,
