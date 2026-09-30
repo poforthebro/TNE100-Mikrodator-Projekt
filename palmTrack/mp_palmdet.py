@@ -64,11 +64,13 @@ class MPPalmDet:
 
         return results
     
-    def _postprocess(self, output_blob, original_shape, pad_bias):
+    def _postprocess(self, output_blob, original_shape, pad_bias):  
+        # output_blob[1] is 2D: (1, N) -> extract the first row to get 1D scores
         score = output_blob[1][0, :] 
         
-        box_delta = output_blob[0][0, :]
-        landmark_delta = output_blob[0][0, :]
+        # output_blob[0] is 2D: (N, 18) -> extract ALL rows (:), but split the columns
+        box_delta = output_blob[0][:, 0:4]
+        landmark_delta = output_blob[0][:, 4:]
         
         scale = max(original_shape)
 
@@ -77,8 +79,8 @@ class MPPalmDet:
         score = 1 / (1 + np.exp(-score))
 
         # get boxes
-        cxy_delta = box_delta[:, :] / self.input_size
-        wh_delta = box_delta[:, :] / self.input_size
+        cxy_delta = box_delta[:, :2] / self.input_size
+        wh_delta = box_delta[:, 2:] / self.input_size
         xy1 = (cxy_delta - wh_delta / 2 + self.anchors) * scale
         xy2 = (cxy_delta + wh_delta / 2 + self.anchors) * scale
         boxes = np.concatenate([xy1, xy2], axis=1)
