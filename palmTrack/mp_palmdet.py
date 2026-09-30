@@ -64,23 +64,20 @@ class MPPalmDet:
 
         return results
     
-    def _postprocess(self, output_blob, original_shape, pad_bias):
-        # 1. Force the regressors array into a guaranteed 2D shape (2016, 18)
-        # This completely bypasses any dimension-dropping weirdness from OpenCV
-        regressors = output_blob[0].reshape(-1, 18) 
-        
-        # 2. Extract boxes and landmarks safely now that we KNOW it's exactly 2D
+def _postprocess(self, output_blob, original_shape, pad_bias):
+        # 1. Output 0 contains [boxes (4) + landmarks (14)] = 18 values per anchor
+        regressors = output_blob[0].reshape(-1, 18)
         box_delta = regressors[:, 0:4]
         landmark_delta = regressors[:, 4:]
-        
-        # 3. Force scores into a guaranteed 1D shape (2016,)
-        score = output_blob[1].flatten() 
-        
+
+        # 2. Output 1 contains classification scores per anchor
+        score = output_blob[1].flatten()
+
         scale = max(original_shape)
 
         # get scores
         score = score.astype(np.float32)
-        score = 1 / (1 + np.exp(-score))
+        score = 1.0 / (1.0 + np.exp(-score))
 
         # get boxes
         cxy_delta = box_delta[:, :2] / self.input_size
@@ -89,19 +86,13 @@ class MPPalmDet:
         xy2 = (cxy_delta + wh_delta / 2 + self.anchors) * scale
         boxes = np.concatenate([xy1, xy2], axis=1)
         boxes -= [pad_bias[0], pad_bias[1], pad_bias[0], pad_bias[1]]
-        
-        # Format explicitly for OpenCV C++ backend
-        boxes_list = boxes.tolist()
-        score_list = score.tolist()
-        
+
         # NMS
-        keep_idx = cv.dnn.NMSBoxes(boxes_list, score_list, self.score_threshold, self.nms_threshold, top_k=self.topK)
-        
+        keep_idx = cv.dnn.NMSBoxes(boxes.tolist(), score.tolist(), self.score_threshold, self.nms_threshold, top_k=self.topK)
         if len(keep_idx) == 0:
             return np.empty(shape=(0, 19))
-            
+
         keep_idx = np.array(keep_idx).flatten()
-        
         selected_score = score[keep_idx]
         selected_box = boxes[keep_idx]
 
@@ -114,10 +105,6 @@ class MPPalmDet:
         selected_landmarks *= scale
         selected_landmarks -= pad_bias
 
-        # [
-        #   [bbox_coords, landmarks_coords, score]
-        #   ...
-        # ]
         return np.c_[selected_box.reshape(-1, 4), selected_landmarks.reshape(-1, 14), selected_score.reshape(-1, 1)]
 
     def _load_anchors(self):

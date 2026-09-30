@@ -11,7 +11,8 @@ assert opencv_python_version(cv.__version__) >= opencv_python_version("4.10.0"),
 from mp_handpose import MPHandPose
 from mp_palmdet import MPPalmDet
 
-palm_model_path = "handpose_estimation_mediapipe_2023feb.onnx"
+handpose_model_path = "handpose_estimation_mediapipe_2023feb.onnx"
+palm_model_path = "palm_detection_mediapipe_2023feb.onnx"
 
 # Valid combinations of backends and targets
 backend_target_pairs = [
@@ -287,7 +288,7 @@ if __name__ == '__main__':
                               targetId=target_id
                              )
     # handpose detector
-    handpose_detector = MPHandPose(modelPath=args.model,
+    handpose_detector = MPHandPose(modelPath=handpose_model_path,
                                    confThreshold=args.conf_threshold,
                                    backendId=backend_id,
                                    targetId=target_id
