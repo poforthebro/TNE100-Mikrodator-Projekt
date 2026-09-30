@@ -65,10 +65,10 @@ class MPPalmDet:
         return results
     
     def _postprocess(self, output_blob, original_shape, pad_bias):  
-        # output_blob[1] is 2D: (1, N) -> extract the first row to get 1D scores
-        score = output_blob[1][0, :] 
+        # FIX: Flatten completely side-steps the shape guessing game and grabs all N scores safely
+        score = output_blob[1].flatten() 
         
-        # output_blob[0] is 2D: (N, 18) -> extract ALL rows (:), but split the columns
+        # Keep these exactly as they are - they successfully grabbed all the boxes!
         box_delta = output_blob[0][:, 0:4]
         landmark_delta = output_blob[0][:, 4:]
         
