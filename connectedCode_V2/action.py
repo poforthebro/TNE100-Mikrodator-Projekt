@@ -1,6 +1,8 @@
 import queue
 from gpiozero import Servo
 from gpiozero.pins.pigpio import PiGPIOFactory
+from gpiozero import PhaseEnableMotor
+from time import sleep 
 
 def run_motor_worker(data_queue):
     print("Initializing Servo Hardware...")
@@ -8,11 +10,13 @@ def run_motor_worker(data_queue):
     # 1. Hardware Setup (Runs once when the thread starts)
     factory = PiGPIOFactory()
     servo_y = Servo(18, pin_factory=factory) # Make sure this matches your working pin
+    motor = PhaseEnableMotor(phase=26,enable=13)
     
     # 2. Control System Parameters
     Kp = 0.002                 # Gain: Fraction of delta_y to move per frame
     DEADZONE = 15              # Threshold: Ignore tiny pixel movements
     current_servo_pos_y = 0.0  # Center position
+    current_motor_speed = 0.0          # Initial motor speed (not used in this snippet)
     
     # Center the servo on startup
     servo_y.value = current_servo_pos_y
