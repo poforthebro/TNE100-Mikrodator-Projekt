@@ -41,9 +41,9 @@ def run_motor_worker(data_queue):
             if abs(delta_x) > DEADZONE:
                 speed = delta_x * Kp_motor
                 speed = max(-1.0, min(1.0, speed))
-                if current_motor_speed > 0:
+                if speed > 0:
                     motor.forward(speed)
-                elif current_motor_speed < 0:
+                elif speed < 0:
                     motor.backward(-speed)
             else:
                 motor.stop()
