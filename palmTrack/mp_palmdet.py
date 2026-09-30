@@ -77,8 +77,8 @@ class MPPalmDet:
         score = 1 / (1 + np.exp(-score))
 
         # get boxes
-        cxy_delta = box_delta[:, :2] / self.input_size
-        wh_delta = box_delta[:, 2:] / self.input_size
+        cxy_delta = box_delta[:, :] / self.input_size
+        wh_delta = box_delta[:, :] / self.input_size
         xy1 = (cxy_delta - wh_delta / 2 + self.anchors) * scale
         xy2 = (cxy_delta + wh_delta / 2 + self.anchors) * scale
         boxes = np.concatenate([xy1, xy2], axis=1)
