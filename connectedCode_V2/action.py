@@ -31,7 +31,7 @@ def run_motor_worker(data_queue):
                 adjustment = delta_y * Kp
                 
                 # Add adjustment to current position (change to '-' if it moves the wrong way)
-                current_servo_pos_y = current_servo_pos_y - adjustment
+                current_servo_pos_y = current_servo_pos_y + adjustment
                 
                 # Clamp the value between -1.0 and 1.0 so gpiozero doesn't crash
                 current_servo_pos_y = max(-1.0, min(1.0, current_servo_pos_y))
