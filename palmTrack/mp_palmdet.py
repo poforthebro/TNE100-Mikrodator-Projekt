@@ -64,7 +64,7 @@ class MPPalmDet:
 
         return results
     
-def _postprocess(self, output_blob, original_shape, pad_bias):
+    def _postprocess(self, output_blob, original_shape, pad_bias):
         # 1. Output 0 contains [boxes (4) + landmarks (14)] = 18 values per anchor
         regressors = output_blob[0].reshape(-1, 18)
         box_delta = regressors[:, 0:4]
@@ -107,8 +107,8 @@ def _postprocess(self, output_blob, original_shape, pad_bias):
 
         return np.c_[selected_box.reshape(-1, 4), selected_landmarks.reshape(-1, 14), selected_score.reshape(-1, 1)]
 
-def _load_anchors(self):
-    return np.array([[0.02083333, 0.02083333],
+    def _load_anchors(self):
+        return np.array([[0.02083333, 0.02083333],
                       [0.02083333, 0.02083333],
                       [0.0625, 0.02083333],
                       [0.0625, 0.02083333],
