@@ -1,8 +1,77 @@
 import cv2
+import numpy as np
+from mp_handpose import MPHandPose
+from mp_palmdet import MPPalmDet
 
-class hand_tracking:
+class handTracking:
 
     # Define and initilize each use of the class with these settings
-    def __init__(self, MLresWidth, MLresHeight):
+    def __init__(self, handpose_model_path, palm_model_path, backend_id=cv.dnn.DNN_BACKEND_OPENCV, target_id=cv.dnn.DNN_TARGET_CPU, conf_threshold=0.9):
+        self.handpose_model_path = handpose_model_path
+        self.palm_model_path = palm_model_path
+        self.palm_detector = None
+        self.handpose_detector = None
+
         print("Initilizing hand tracking hardware")
+
+        backend_id = cv.dnn.DNN_BACKEND_OPENCV
+        target_id = cv.dnn.DNN_TARGET_CPU
         
+        # palm detector
+        self.palm_detector = MPPalmDet(modelPath=palm_model_path,
+                    nmsThreshold=0.3,
+                    scoreThreshold=0.6,
+                    backendId=backend_id,
+                    targetId=target_id
+                    )
+        
+        
+        # handpose detector
+        self.handpose_detector = MPHandPose(modelPath=handpose_model_path,
+                        confThreshold=args.conf_threshold,
+                        backendId=backend_id,
+                        targetId=target_id
+                        )
+
+
+
+    def getHandCoordinates(self, image):
+        # Palm detector inference
+        palms = self.palm_detector.infer(image)
+        hands = np.empty(shape=(0, 132))
+
+        # Estimate the pose of each hand
+        for palm in palms:
+            # Handpose detector inference
+            handpose = self.handpose_detector.infer(image, palm)
+            if handpose is not None:
+                hands = np.vstack((hands, handpose))
+        return palms, hands
+
+
+    '''
+    # Get function with more output parameters 
+
+    def get_hand_coordinates(self, image):
+        # Palm detector inference
+        palms = self.palm_detector.infer(image)
+        hands = []
+
+        # Estimate the pose of each hand
+        for palm in palms:
+            # Handpose detector inference
+            handpose = self.handpose_detector.infer(image, palm)
+            if handpose is not None:
+                landmarks_screen = handpose[4:67].reshape(21, 3).astype(np.int32)
+                landmarks_world = handpose[67:130].reshape(21, 3)
+                hands.append({
+                    'screen': landmarks_screen,
+                    'world': landmarks_world
+                })
+
+        return palms, hands
+    
+    '''
+
+
+    
