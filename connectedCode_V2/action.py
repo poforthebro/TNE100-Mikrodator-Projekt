@@ -18,7 +18,7 @@ def run_motor_worker(data_queue):
     DEADZONE = 15              # Threshold: Ignore tiny pixel movements
     current_servo_pos_y = 1  # Center position   
     MAX_MOTOR_SPEED = 0.75
-    MIN_MOTOR_SPEED = 0.35
+    MIN_MOTOR_SPEED = 0.20
     
     # Center the servo on startup
     servo_y.value = current_servo_pos_y
