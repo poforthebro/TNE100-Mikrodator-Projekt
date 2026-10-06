@@ -10,8 +10,8 @@ from camera import camera
 from queue_handler import queue_handler
 
 # Variable for width and height in pixels that is used for video stream
-streamResWidth = 1920
-streamResHeight = 1080
+streamResWidth = 1280
+streamResHeight = 720
 
 # Variable for width and height in pixels that is used by the ML algorithms
 MLresWidth = 320

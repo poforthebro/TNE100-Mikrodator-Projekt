@@ -9,7 +9,7 @@ class face_tracking():
 
         # Load the built-in face detector in cv2. It is called YuNet
         self.detector = cv2.FaceDetectorYN.create(
-        model='face_detection_yunet.onnx',
+        model='model/face_detection_yunet.onnx',
         config='',
         input_size=(MLresWidth, MLresHeight),
         score_threshold=Q
@@ -39,14 +39,14 @@ class face_tracking():
         return faces, quality
 
 
-# Function to calculate the quality score for a single face
-def get_quality_score(face):
-    width = face[2]
-    height = face[3]
-    confidence = face[14]
+    # Function to calculate the quality score for a single face
+    def get_quality_score(face):
+        width = face[2]
+        height = face[3]
+        confidence = face[14]
 
-    area = height * width
-    q = area * confidence
+        area = height * width
+        q = area * confidence
 
-    return q
+        return q
 

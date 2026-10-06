@@ -1,4 +1,4 @@
-import cv2
+import cv2 as cv
 import numpy as np
 from mp_handpose import MPHandPose
 from mp_palmdet import MPPalmDet
@@ -6,11 +6,11 @@ from mp_palmdet import MPPalmDet
 class handTracking:
 
     # Define and initilize each use of the class with these settings
-    def __init__(self, handpose_model_path, palm_model_path, backend_id=cv.dnn.DNN_BACKEND_OPENCV, target_id=cv.dnn.DNN_TARGET_CPU, conf_threshold=0.9):
-        self.handpose_model_path = handpose_model_path
-        self.palm_model_path = palm_model_path
+    def __init__(self):
+        self.handpose_model_path =  'model/face_detection_yunet.onnx',
         self.palm_detector = None
         self.handpose_detector = None
+        
 
         print("Initilizing hand tracking hardware")
 
@@ -18,7 +18,8 @@ class handTracking:
         target_id = cv.dnn.DNN_TARGET_CPU
         
         # palm detector
-        self.palm_detector = MPPalmDet(modelPath=palm_model_path,
+        self.palm_detector = MPPalmDet(
+                    modelPath='model/palm_detection_mediapipe_2023feb.onnx',
                     nmsThreshold=0.3,
                     scoreThreshold=0.6,
                     backendId=backend_id,
@@ -27,8 +28,9 @@ class handTracking:
         
         
         # handpose detector
-        self.handpose_detector = MPHandPose(modelPath=handpose_model_path,
-                        confThreshold=args.conf_threshold,
+        self.handpose_detector = MPHandPose(
+            modelPath='model/handpose_estimation_mediapipe_2023feb.onnx',
+                        confThreshold=0.6,
                         backendId=backend_id,
                         targetId=target_id
                         )
@@ -47,6 +49,17 @@ class handTracking:
             if handpose is not None:
                 hands = np.vstack((hands, handpose))
         return palms, hands
+
+
+
+    def getHandGesture(self, palms, hands, image):
+        for palm in palms:
+                # Handpose detector inference
+                handpose = self.handpose_detector.infer(image, palm)
+                if handpose is not None:
+                    hands = np.vstack((hands, handpose))
+
+            
 
 
     '''

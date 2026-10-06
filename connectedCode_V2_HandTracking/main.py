@@ -1,6 +1,6 @@
 import threading # Make sure we can divide code into different threads
 import queue # For handling queues
-import numpy
+import numpy as np
 import cv2
 from action import run_motor_worker
 from face_tracking import face_tracking
@@ -8,6 +8,10 @@ from visual import display
 from delta import delta
 from camera import camera
 from queue_handler import queue_handler
+from hand_tracking import handTracking
+
+
+########    Variables used      ########### 
 
 # Variable for width and height in pixels that is used for video stream
 streamResWidth = 1920
@@ -21,19 +25,22 @@ MLresHeight = 240
 scale_x = streamResWidth / MLresWidth
 scale_y = streamResHeight / MLresHeight
 
-# Machine Learning Quality factor
+# Machine Learning Quality factor for face tracking
 ML_Q = 0.3
 
 
-########    Variables used      ########### 
+########    Classes used      ########### 
 
 # We need to create instances of each class here:
 cam = camera(streamResWidth, streamResHeight, MLresWidth, MLresHeight)
 face_tracker = face_tracking(MLresWidth, MLresHeight, ML_Q)
 Delta = delta(MLresWidth, MLresHeight)
 data_queue = queue_handler()
+hand_tracker = handTracking()
+
 
 display1 = display(scale_x, scale_y)
+
 
 
 
@@ -43,6 +50,12 @@ while True:
     deltaArray = (0, 0)
 
     faces, quality = face_tracker.get_faces(frames[0])
+    
+    # Run hand tracker
+    palms, hands = hand_tracker.getHandCoordinates(frames[0])
+
+    # Figure out hand sign / whatever
+
     if faces is not None:
         best_face = faces[0] # The face vector is sorted based on quality already, The first one is the best
         deltaArray = Delta.get_delta(best_face)
