@@ -17,7 +17,7 @@ def run_motor_worker(data_queue):
     Kp_motor = 0.0015           # Gain for motor speed adjustment
     DEADZONE = 15              # Threshold: Ignore tiny pixel movements
     current_servo_pos_y = 1  # Center position   
-    MAX_MOTOR_SPEED = 0.35
+    MAX_MOTOR_SPEED = 0.50
     
     # Center the servo on startup
     servo_y.value = current_servo_pos_y
