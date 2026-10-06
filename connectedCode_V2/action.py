@@ -43,9 +43,9 @@ def run_motor_worker(data_queue):
                 speed = delta_x * Kp_motor
                 speed = max(-MAX_MOTOR_SPEED, min(MAX_MOTOR_SPEED, speed))
                 if speed < 0:
-                    motor.forward(speed)
+                    motor.forward(-speed)
                 elif speed > 0:
-                    motor.backward(-speed)
+                    motor.backward(speed)
             else:
                 motor.stop()
                 
