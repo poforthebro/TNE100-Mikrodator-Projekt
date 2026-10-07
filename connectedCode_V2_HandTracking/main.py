@@ -43,6 +43,10 @@ hand_tracker = handTracking()
 display1 = display(scale_x, scale_y)
 
 frame_count = 0
+faces = []
+quality = []
+faces = []
+quality = []
 
 
 while True:
@@ -50,13 +54,13 @@ while True:
     active_quality = [0]
     deltaArray = (0, 0)
 
-    if frame_count % 2 != 0:
+    if frame_count % 2 == 0:
         # run face tracker
         faces, quality = face_tracker.get_faces(frames[0])
 
-    if frame_count % 2 == 0:
+    if frame_count % 2 != 0:
         # Run hand tracker
-        palms, hands = hand_tracker.getHandCoordinates(frames[0])
+        faces, quality = hand_tracker.getHandCoordinates(frames[0])
         print("Hands: ")
 
 
@@ -74,7 +78,7 @@ while True:
         
 
     # Figure out hand sign / whatever, not finished
-   # gestuer = getGesture(palms, hands)
+   # gesture = getGesture(palms, hands)
 
     if faces is not None:
         best_face = faces[0] # The face vector is sorted based on quality already, The first one is the best
