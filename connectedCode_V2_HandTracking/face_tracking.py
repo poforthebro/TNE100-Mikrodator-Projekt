@@ -40,7 +40,7 @@ class face_tracking():
 
 
     # Function to calculate the quality score for a single face
-    def get_quality_score(face):
+def get_quality_score(face):
         width = face[2]
         height = face[3]
         confidence = face[14]
