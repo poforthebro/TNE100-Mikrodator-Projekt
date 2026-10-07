@@ -25,7 +25,13 @@ scale_y = streamResHeight / MLresHeight
 ML_Q = 0.3
 Q_factor_threshold = 1500
 
-########    Variables used      ########### 
+frame_count = 0
+faces = []
+quality = []
+hands = []
+palm = []
+
+########    Classes used      ########### 
 
 # We need to create instances of each class here:
 cam = camera(streamResWidth, streamResHeight, MLresWidth, MLresHeight)

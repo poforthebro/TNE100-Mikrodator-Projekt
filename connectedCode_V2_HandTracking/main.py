@@ -9,7 +9,7 @@ from delta import delta
 from camera import camera
 from queue_handler import queue_handler
 from hand_tracking import handTracking
-from gesture_estimator import getGesture
+from gesture_estimator import get_Gesture
 
 
 ########    Variables used      ########### 
@@ -28,6 +28,7 @@ scale_y = streamResHeight / MLresHeight
 
 # Machine Learning Quality factor for face tracking
 ML_Q = 0.3
+Q_factor_threshold = 1500
 
 
 ########    Classes used      ########### 
@@ -85,7 +86,10 @@ while True:
         deltaArray = Delta.get_delta(best_face)
         active_quality = quality
 
-        data_queue.send_to_queue(deltaArray)
+
+        # LEo added this to not track any bad faces
+        if quality[0] >= Q_factor_threshold:
+            data_queue.send_to_queue(deltaArray)
 
     display1.display_frame(frames[1], faces, active_quality[0], deltaArray)
 
