@@ -50,7 +50,7 @@ while True:
 
 
         # LEo added this to not track any bad faces
-        if quality >= Q_factor_threshold:
+        if quality >= Q_factor_threshold(0):
             data_queue.send_to_queue(deltaArray)
 
     display1.display_frame(frames[1], faces, active_quality[0], deltaArray)
