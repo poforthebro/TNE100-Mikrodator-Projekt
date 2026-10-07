@@ -1,0 +1,26 @@
+void Encoder::maintainDepth(float currentDepth, float targetDepth, unsigned long currentTime) // PI reglerar för att arbeta så att båten är på rätt djup.
+{
+    float error = currentDepth - targetDepth;
+    float dt = (currentTime - startTimePID) / 1000.0;
+    startTimePID = currentTime;
+
+    if (abs(error) > 1) {
+        float test_integral = integral + error * dt;
+        float test_korr = kp * error + ki * test_integral + zeroPoint; // Testintegral för att motverka windup på integralen
+
+        if (test_korr > minSpeed && test_korr < maxSpeed) { // Om testet inte drar den för mycket är det ok
+            integral = test_integral;
+        } else if ((test_korr >= maxSpeed && error < 0) || (test_korr <= minSpeed && error > 0)) { // Men om den drar för mycket, men åt rätt håll är det ok också
+            integral = test_integral;
+        }
+
+        float korr = kp * error + ki * integral + zeroPoint;
+        float korr1 = constrain(korr, minSpeed, maxSpeed); // Ändrat så att den bara får gå mellan +20, -20 från zeroPoint
+
+        safeGuardDrive((int)korr1); // Anropar safeGuardDrive för att låta den funktionen kontrollera att encodern inte kan skruva ur sig själv eller ha sönder något.
+    } else {
+        integral = 0;              // Nollställer integralen
+        safeGuardDrive(zeroPoint); // Stänger av pumpen om den är i rätt intervall
+    }
+}
+
