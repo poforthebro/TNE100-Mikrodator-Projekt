@@ -9,6 +9,7 @@ from delta import delta
 from camera import camera
 from queue_handler import queue_handler
 from hand_tracking import handTracking
+from gesture_estimator import getGesture
 
 
 ########    Variables used      ########### 
@@ -53,8 +54,21 @@ while True:
     
     # Run hand tracker
     palms, hands = hand_tracker.getHandCoordinates(frames[0])
+    print("Hands: ")
+    
+    for hand in hands:
+        for entry in hand:
+            print(entry)
 
-    # Figure out hand sign / whatever
+    print("palms: ")
+    for palm in palms:
+            for entry in palm:
+                print(entry)
+    
+        
+
+    # Figure out hand sign / whatever, not finished
+   # gestuer = getGesture(palms, hands)
 
     if faces is not None:
         best_face = faces[0] # The face vector is sorted based on quality already, The first one is the best
