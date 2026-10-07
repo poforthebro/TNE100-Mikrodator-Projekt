@@ -42,7 +42,7 @@ hand_tracker = handTracking()
 
 display1 = display(scale_x, scale_y)
 
-
+frame_count = 0
 
 
 while True:
@@ -50,12 +50,18 @@ while True:
     active_quality = [0]
     deltaArray = (0, 0)
 
-    faces, quality = face_tracker.get_faces(frames[0])
-    
-    # Run hand tracker
-    palms, hands = hand_tracker.getHandCoordinates(frames[0])
-    print("Hands: ")
-    
+    if frame_count % 2 != 0:
+        # run face tracker
+        faces, quality = face_tracker.get_faces(frames[0])
+
+    if frame_count % 2 == 0:
+        # Run hand tracker
+        palms, hands = hand_tracker.getHandCoordinates(frames[0])
+        print("Hands: ")
+
+
+    frame_count += 1 # Increase frame count
+
     for hand in hands:
         for entry in hand:
             print(entry)
