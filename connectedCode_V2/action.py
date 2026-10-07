@@ -72,7 +72,7 @@ def run_motor_worker(data_queue):
                 rspeed = abs(u)
                 pspeed = max(MIN_MOTOR_SPEED, min(MAX_MOTOR_SPEED, rspeed)) 
                 
-                # Check the sign of the PID output (u), rather than delta_x
+                
                 if u < 0:
                     motor_x.forward(pspeed)
                 else:
