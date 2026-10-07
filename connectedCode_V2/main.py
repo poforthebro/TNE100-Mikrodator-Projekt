@@ -23,7 +23,7 @@ scale_y = streamResHeight / MLresHeight
 
 # Machine Learning Quality factor
 ML_Q = 0.3
-
+Q_factor_threshold = 1500
 
 ########    Variables used      ########### 
 
@@ -48,7 +48,10 @@ while True:
         deltaArray = Delta.get_delta(best_face)
         active_quality = quality
 
-        data_queue.send_to_queue(deltaArray)
+
+        # LEo added this to not track any bad faces
+        if quality >= Q_factor_threshold:
+            data_queue.send_to_queue(deltaArray)
 
     display1.display_frame(frames[1], faces, active_quality[0], deltaArray)
 
