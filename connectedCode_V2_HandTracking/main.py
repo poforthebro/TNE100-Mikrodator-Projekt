@@ -45,8 +45,8 @@ display1 = display(scale_x, scale_y)
 frame_count = 0
 faces = []
 quality = []
-faces = []
-quality = []
+hands = []
+palm = []
 
 
 while True:
@@ -60,7 +60,7 @@ while True:
 
     if frame_count % 2 != 0:
         # Run hand tracker
-        faces, quality = hand_tracker.getHandCoordinates(frames[0])
+        palms, hands = hand_tracker.getHandCoordinates(frames[0])
         print("Hands: ")
 
 
