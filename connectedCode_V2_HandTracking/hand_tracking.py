@@ -7,7 +7,7 @@ class handTracking:
 
     # Define and initilize each use of the class with these settings
     def __init__(self):
-        self.handpose_model_path =  'model/face_detection_yunet.onnx',
+        self.handpose_model_path =  'models/face_detection_yunet.onnx',
         self.palm_detector = None
         self.handpose_detector = None
         
@@ -19,7 +19,7 @@ class handTracking:
         
         # palm detector
         self.palm_detector = MPPalmDet(
-                    modelPath='model/palm_detection_mediapipe_2023feb.onnx',
+                    modelPath='models/palm_detection_mediapipe_2023feb.onnx',
                     nmsThreshold=0.3,
                     scoreThreshold=0.6,
                     backendId=backend_id,
@@ -29,7 +29,7 @@ class handTracking:
         
         # handpose detector
         self.handpose_detector = MPHandPose(
-            modelPath='model/handpose_estimation_mediapipe_2023feb.onnx',
+            modelPath='models/handpose_estimation_mediapipe_2023feb.onnx',
                         confThreshold=0.6,
                         backendId=backend_id,
                         targetId=target_id

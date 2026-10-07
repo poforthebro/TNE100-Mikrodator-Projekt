@@ -9,7 +9,7 @@ class face_tracking():
 
         # Load the built-in face detector in cv2. It is called YuNet
         self.detector = cv2.FaceDetectorYN.create(
-        model='model/face_detection_yunet.onnx',
+        model='models/face_detection_yunet.onnx',
         config='',
         input_size=(MLresWidth, MLresHeight),
         score_threshold=Q
