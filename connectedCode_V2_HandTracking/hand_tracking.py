@@ -53,22 +53,26 @@ class handTracking:
 
 
 
-    def sortHands(self, hands, palms):
-        quality = []
-        for hand in hands:
-            q = get_quality_score(hand)
-            quality.append(q)
-
+def sortHands(self, hands, palms):
+        # Sort using the quality score function below
         hands = sorted(hands, key=get_quality_score, reverse=True)
         palms = sorted(palms, key=get_quality_score, reverse=True)
-        return hands, palms
+        
+        # Format the 132-value array into a 21x3 coordinate array for the gesture estimator
+        formatted_hands = []
+        for hand in hands:
+            landmarks = hand[4:67].reshape(21, 3)
+            formatted_hands.append(landmarks)
+            
+        # Returning PALMS first, then HANDS to match your main.py file!
+        return palms, formatted_hands
 
 
 
-def get_quality_score(face):
+def get_quality_score(face, Q_indicies):
     width = face[2]
     height = face[3]
-    confidence = face[14]
+    confidence = face[Q_indicies]
 
     area = height * width
     q = area * confidence

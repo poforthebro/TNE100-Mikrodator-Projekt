@@ -96,23 +96,11 @@ while True:
             data_queue.send_to_queue(deltaArray)
 
 
- # ________________ Hand Tracking __________________ #
+# ________________ Hand Tracking __________________ #
     # Hand tracking code:
     if hands:
-        # Convert to a numpy array so we can reshape it
-        best_hand = np.array(hands[0])
-        
-        # If the array is flat (1D), reshape it into a 2D list of points
-        if best_hand.ndim == 1:
-            # If it has 63 values, it contains X, Y, and Z for 21 points
-            if len(best_hand) == 63:
-                best_hand = best_hand.reshape((21, 3))
-            # If it has 42 values, it contains just X and Y for 21 points
-            elif len(best_hand) == 42:
-                best_hand = best_hand.reshape((21, 2))
-                
-        # Now pass the properly shaped array to the instance
-        gesture = gestureTracker.getGesture(best_hand)
+        best_hand = hands[0] # This is now safely a 21x3 array!
+        gesture = gesture_estimator.getGesture(best_hand)
         
         print("Current Gesture: ") 
         print(gesture)
