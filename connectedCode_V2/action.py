@@ -59,7 +59,7 @@ def run_motor_worker(data_queue):
     
     while True:
         try:
-            delta_x, delta_y = data_queue.get(timeout=0.2) 
+            delta_x, delta_y = data_queue.get(timeout=0.1) 
             print(delta_x,delta_y)
             '''
             if abs(delta_y) > DEADZONE:
