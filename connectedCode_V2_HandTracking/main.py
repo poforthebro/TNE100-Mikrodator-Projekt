@@ -39,6 +39,7 @@ face_tracker = face_tracking(MLresWidth, MLresHeight, ML_Q)
 Delta = delta(MLresWidth, MLresHeight)
 data_queue = queue_handler()
 hand_tracker = handTracking()
+gestureTracker = get_Gesture()
 
 
 display1 = display(scale_x, scale_y)
@@ -99,7 +100,7 @@ while True:
     # Hand tracking code:
     if hands:
         best_hand = hands[0]
-        gesture = get_Gesture.getGesture(best_hand)
+        gesture = gestureTracker.getGesture(best_hand)
         print("Current Gesture: ") 
         print(gesture)
 
