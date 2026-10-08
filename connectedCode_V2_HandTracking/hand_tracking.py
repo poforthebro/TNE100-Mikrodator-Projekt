@@ -48,20 +48,32 @@ class handTracking:
             handpose = self.handpose_detector.infer(image, palm)
             if handpose is not None:
                 hands = np.vstack((hands, handpose))
-        return palms, hands
+        
+        return sortHands(hands, palms)
 
 
 
-    def getHandGesture(self, palms, hands, image):
-        for palm in palms:
-                # Handpose detector inference
-                handpose = self.handpose_detector.infer(image, palm)
-                if handpose is not None:
-                    hands = np.vstack((hands, handpose))
+   def sortHands(self, hands, palms):
+        quality = []
+        for hand in hands:
+            q = get_quality_score(hand)
+            quality.append(q)
 
-            
+        hands = sorted(hands, key=get_quality_score, reverse=True)
+        palms = sorted(palms, key=get_quality_score, reverse=True)
+        return hands, palms
 
 
+
+def get_quality_score(face):
+        width = face[2]
+        height = face[3]
+        confidence = face[14]
+
+        area = height * width
+        q = area * confidence
+
+        return q
     '''
     # Get function with more output parameters 
 

@@ -67,6 +67,8 @@ while True:
 
     frame_count += 1 # Increase frame count
 
+
+# Example code for testing. remove
     for hand in hands:
         for entry in hand:
             print(entry)
@@ -76,7 +78,6 @@ while True:
             for entry in palm:
                 print(entry)
     
-        
 
     # Figure out hand sign / whatever, not finished
    # gesture = getGesture(palms, hands)
@@ -90,6 +91,15 @@ while True:
         # LEo added this to not track any bad faces
         if quality[0] >= Q_factor_threshold:
             data_queue.send_to_queue(deltaArray)
+
+    # Hand tracking code:
+    if hands is not None:
+         best_hand = hands[0]
+         gesture = get_Gesture.getGesture(best_hand)
+         print("Current Gesture: ") 
+         print(gesture)
+
+
 
     display1.display_frame(frames[1], faces, active_quality[0], deltaArray)
 

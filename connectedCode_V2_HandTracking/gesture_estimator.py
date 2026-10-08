@@ -119,7 +119,6 @@ class get_Gesture():
 
     
 
-    def getGesture(self, landmarks):
-        hand = landmarks[:21, :2]
+    def getGesture(self, hand):
         gesture = self._classify(hand)
         return gesture
