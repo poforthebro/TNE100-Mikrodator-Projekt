@@ -47,7 +47,7 @@ frame_count = 0
 faces = []
 quality = []
 hands = []
-palm = []
+palms = []
 
 
 while True:
