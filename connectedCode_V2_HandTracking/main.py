@@ -28,7 +28,7 @@ scale_y = streamResHeight / MLresHeight
 
 # Machine Learning Quality factor for face tracking
 ML_Q = 0.3
-Q_factor_threshold = 1200
+Q_factor_threshold = 900
 
 
 ########    Classes used      ########### 
