@@ -94,7 +94,7 @@ while True:
 
     # Hand tracking code:
     if hands is not None:
-        best_hand = hands[0]
+        best_hand = hands[0, :]
         gesture = get_Gesture.getGesture(best_hand)
         print("Current Gesture: ") 
         print(gesture)
