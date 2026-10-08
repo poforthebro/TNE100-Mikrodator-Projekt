@@ -69,11 +69,11 @@ class handTracking:
 
 
 
-def get_quality_score(face,):
-    Q_indicies = 130
-    width = face[2]
-    height = face[3]
-    confidence = face[Q_indicies]
+def get_quality_score(hand):
+    Q_indicies = 13
+    width = hand[2]
+    height = hand[3]
+    confidence = hand[Q_indicies]
 
     area = height * width
     q = area * confidence
