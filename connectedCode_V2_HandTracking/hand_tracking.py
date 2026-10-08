@@ -66,15 +66,17 @@ class handTracking:
 
 
 def get_quality_score(face):
-        width = face[2]
-        height = face[3]
-        confidence = face[14]
+    width = face[2]
+    height = face[3]
+    confidence = face[14]
 
-        area = height * width
-        q = area * confidence
+    area = height * width
+    q = area * confidence
 
-        return q
-    '''
+    return q
+
+
+'''
     # Get function with more output parameters 
 
     def get_hand_coordinates(self, image):
