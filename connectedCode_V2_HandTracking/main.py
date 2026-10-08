@@ -67,8 +67,8 @@ while True:
 
     frame_count += 1 # Increase frame count
 
-'''
-# Example code for testing. remove
+    '''
+    # Example code for testing. remove
     for hand in hands:
         for entry in hand:
             print(entry)
@@ -80,7 +80,6 @@ while True:
                 print(entry)
     
     '''
-
     # Figure out hand sign / whatever, not finished
    # gesture = getGesture(palms, hands)
 
