@@ -62,13 +62,14 @@ while True:
     if frame_count % 2 != 0:
         # Run hand tracker
         palms, hands = hand_tracker.getHandCoordinates(frames[0])
-        print("Hands: ")
+        
 
 
     frame_count += 1 # Increase frame count
 
     '''
     # Example code for testing. remove
+    print("Hands: ")
     for hand in hands:
         for entry in hand:
             print(entry)
