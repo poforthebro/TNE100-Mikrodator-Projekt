@@ -49,11 +49,11 @@ class handTracking:
             if handpose is not None:
                 hands = np.vstack((hands, handpose))
         
-        return sortHands(hands, palms)
+        return self.sortHands(hands, palms)
 
 
 
-   def sortHands(self, hands, palms):
+    def sortHands(self, hands, palms):
         quality = []
         for hand in hands:
             q = get_quality_score(hand)
