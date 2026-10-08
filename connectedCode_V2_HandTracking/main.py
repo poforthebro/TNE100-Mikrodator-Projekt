@@ -73,11 +73,13 @@ while True:
         for entry in hand:
             print(entry)
 
+'''
     print("palms: ")
     for palm in palms:
             for entry in palm:
                 print(entry)
     
+    s'''
 
     # Figure out hand sign / whatever, not finished
    # gesture = getGesture(palms, hands)
