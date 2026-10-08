@@ -100,7 +100,7 @@ while True:
     # Hand tracking code:
     if hands:
         best_hand = hands[0] # This is now safely a 21x3 array!
-        gesture = gesture_estimator.getGesture(best_hand)
+        gesture = gestureTracker.getGesture(best_hand)
         
         print("Current Gesture: ") 
         print(gesture)
