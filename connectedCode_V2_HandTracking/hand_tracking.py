@@ -61,7 +61,7 @@ class handTracking:
         # Format the 132-value array into a 21x3 coordinate array for the gesture estimator
         formatted_hands = []
         for hand in hands:
-            landmarks = hand[4:67].reshape(21, 3)
+            landmarks = hand[4:67].reshape(21, 3)[:, :2]
             formatted_hands.append(landmarks)
             
         # Returning PALMS first, then HANDS to match your main.py file!
