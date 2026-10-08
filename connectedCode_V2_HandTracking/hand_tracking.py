@@ -53,7 +53,7 @@ class handTracking:
 
 
 
-def sortHands(self, hands, palms):
+    def sortHands(self, hands, palms):
         # Sort using the quality score function below
         hands = sorted(hands, key=get_quality_score, reverse=True)
         palms = sorted(palms, key=get_quality_score, reverse=True)
