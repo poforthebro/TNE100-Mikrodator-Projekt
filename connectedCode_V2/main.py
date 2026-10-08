@@ -23,7 +23,7 @@ scale_y = streamResHeight / MLresHeight
 
 # Machine Learning Quality factor
 ML_Q = 0.3
-Q_factor_threshold = 1500
+Q_factor_threshold = 1200
 
 frame_count = 0
 faces = []
