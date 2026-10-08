@@ -92,9 +92,11 @@ while True:
         if quality[0] >= Q_factor_threshold:
             data_queue.send_to_queue(deltaArray)
 
+
+ # ________________ Hand Tracking __________________ #
     # Hand tracking code:
-    if hands is not None:
-        best_hand = hands[0, :]
+    if hands:
+        best_hand = hands[0]
         gesture = get_Gesture.getGesture(best_hand)
         print("Current Gesture: ") 
         print(gesture)
