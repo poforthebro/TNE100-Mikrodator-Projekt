@@ -33,6 +33,7 @@ class display:
                 draw_rectangle(high_res_frame, face, self.scale_x, self.scale_y)
 
 
+
         cv2.imshow('FATTIG ansiktsspårning', high_res_frame)
 
 

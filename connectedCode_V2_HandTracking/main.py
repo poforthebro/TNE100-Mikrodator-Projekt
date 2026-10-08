@@ -106,7 +106,7 @@ while True:
         print(gesture)
 
 
-
+    # add to draw a rectangle around the best hand
     display1.display_frame(frames[1], faces, active_quality[0], deltaArray)
 
     if cv2.waitKey(5) & 0xFF == 27:
