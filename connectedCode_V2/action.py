@@ -53,7 +53,6 @@ def run_motor_worker(data_queue):
     MAX_MOTOR_SPEED = 0.75
     MIN_MOTOR_SPEED = 0.20
 
-    Max 
     # Center the servo on startup
     servo_y.value = current_servo_pos_y
     # y based controller
