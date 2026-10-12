@@ -60,14 +60,13 @@ def run_motor_worker(data_queue):
     while True:
         try:
             delta_x, delta_y = data_queue.get(timeout=0.1) 
-            print(delta_x,delta_y)
-            '''
+            
             if abs(delta_y) > DEADZONE:
                 adjustment = delta_y * Kp_servo
                 current_servo_pos_y = current_servo_pos_y + adjustment
                 current_servo_pos_y = max(-1.0, min(1.0, current_servo_pos_y))
                 servo_y.value = current_servo_pos_y
-            '''   
+            
             if abs(delta_x) > DEADZONE:
                 u = PID_motor.compute(delta_x)
                 rspeed = abs(u)
