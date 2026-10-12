@@ -51,7 +51,7 @@ def run_motor_worker(data_queue):
     DEADZONE = 15 
     current_servo_pos_y = 0.1
     MAX_MOTOR_SPEED = 0.75
-    MIN_MOTOR_SPEED = 0.20
+    MIN_MOTOR_SPEED = 0.00
 
     # Center the servo on startup
     servo_y.value = current_servo_pos_y
