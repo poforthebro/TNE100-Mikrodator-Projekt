@@ -45,11 +45,11 @@ def run_motor_worker(data_queue):
     Ki_servo = 0.000
     Kd_servo = 0.000
     Kp_motor = 0.0015    
-    Ki_motor = 0.001
+    Ki_motor = 0.002   
     Kd_motor = 0.0000
     
     DEADZONE = 15 
-    current_servo_pos_y = 0.3
+    current_servo_pos_y = 0.1
     MAX_MOTOR_SPEED = 0.75
     MIN_MOTOR_SPEED = 0.20
 
