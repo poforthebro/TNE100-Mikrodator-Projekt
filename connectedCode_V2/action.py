@@ -41,7 +41,7 @@ def run_motor_worker(data_queue):
     servo_y = Servo(18, pin_factory=factory)
     motor_x = PhaseEnableMotor(phase=26, enable=13, pin_factory=factory)
     
-    Kp_servo = 0.002                
+    Kp_servo = 0.001              
     Ki_servo = 0.000
     Kd_servo = 0.000
     Kp_motor = 0.0015    
