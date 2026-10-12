@@ -49,7 +49,7 @@ def run_motor_worker(data_queue):
     Kd_motor = 0.0000
     
     DEADZONE = 15 
-    current_servo_pos_y = 0.45
+    current_servo_pos_y = 0.3
     MAX_MOTOR_SPEED = 0.75
     MIN_MOTOR_SPEED = 0.20
 
