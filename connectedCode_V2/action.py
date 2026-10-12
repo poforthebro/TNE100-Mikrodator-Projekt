@@ -46,7 +46,7 @@ def run_motor_worker(data_queue):
     Kd_servo = 0.000
     Kp_motor = 0.0015
     Ki_motor = 0.002   
-    Kd_motor = 0.005
+    Kd_motor = 0.0005
     
     DEADZONE = 15 
     current_servo_pos_y = 0.1
