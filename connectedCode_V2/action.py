@@ -41,40 +41,47 @@ def run_motor_worker(data_queue):
     servo_y = Servo(18, pin_factory=factory)
     motor_x = PhaseEnableMotor(phase=26, enable=13, pin_factory=factory)
     
-    Kp_servo = 0.002                 
-    Kp_motor = 0.0015    
-    Ki_motor = 0.001
-    Kd_motor = 0.0000
+    Kp_servo = 0.001              
+    Ki_servo = 0.000
+    Kd_servo = 0.000
+    Kp_motor = 0.0015
+    Ki_motor = 0.002   
+    Kd_motor = 0.0005
     
     DEADZONE = 15 
-    current_servo_pos_y = 1
+    current_servo_pos_y = 0.1
     MAX_MOTOR_SPEED = 0.75
-    MIN_MOTOR_SPEED = 0.20
-    
+    MIN_MOTOR_SPEED = 0.00
+
     # Center the servo on startup
     servo_y.value = current_servo_pos_y
+    # y based controller
+    PID_servo = PIDController(kp=Kp_servo, ki=Ki_servo, kd=Kd_servo)
     
     # Implement an x based pid controller
     PID_motor = PIDController(kp=Kp_motor, ki=Ki_motor, kd=Kd_motor)
+
+    
     
     while True:
         try:
             delta_x, delta_y = data_queue.get(timeout=0.1) 
-            print(delta_x,delta_y)
-            '''
+            
             if abs(delta_y) > DEADZONE:
-                adjustment = delta_y * Kp_servo
-                current_servo_pos_y = current_servo_pos_y + adjustment
+                uy = PID_servo.compute(delta_y)
+                current_servo_pos_y = current_servo_pos_y + uy
                 current_servo_pos_y = max(-1.0, min(1.0, current_servo_pos_y))
                 servo_y.value = current_servo_pos_y
-            '''   
+            else:
+                PID_servo.reset()
+                
             if abs(delta_x) > DEADZONE:
-                u = PID_motor.compute(delta_x)
-                rspeed = abs(u)
+                ux = PID_motor.compute(delta_x)
+                rspeed = abs(ux)
                 pspeed = max(MIN_MOTOR_SPEED, min(MAX_MOTOR_SPEED, rspeed)) 
                 
                 
-                if u < 0:
+                if ux < 0:
                     motor_x.forward(pspeed)
                 else:
                     motor_x.backward(pspeed)
@@ -82,6 +89,8 @@ def run_motor_worker(data_queue):
                 motor_x.stop()
                 PID_motor.reset() 
                 
+                
         except queue.Empty:
             motor_x.stop()
             PID_motor.reset() 
+            PID_servo.reset()
