@@ -76,4 +76,4 @@ def draw_circle_face(frame, coordinates, scale_x, scale_y):
 
 def write_gesture(frame, gesture, res):
             # draw gesture
-    cv2.putText(frame, f"Gesture: {gesture}", (res[0] - 50, res[1] - 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+    cv2.putText(frame, f"Gesture: {gesture}", (200, 200), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
