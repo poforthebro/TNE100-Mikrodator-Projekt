@@ -44,11 +44,13 @@ gestureTracker = get_Gesture()
 
 display1 = display(scale_x, scale_y)
 
+# Initilize variables so that they will be available for functions
 frame_count = 0
 faces = []
 quality = []
 hands = []
 palms = []
+gesture = None
 
 
 while True:
@@ -81,7 +83,7 @@ while True:
 # ________________ Hand Tracking __________________ #
     # Hand tracking code:
     # If hands is not none or 0
-    if hands:
+    if hands and ( frame_count - 1 ) % 3 == 0:
         best_hand = hands[0] # Hands is sorted and the best hand will be the first one
         gesture = gestureTracker.getGesture(best_hand) # Find the gesture the first hand is doing
         
