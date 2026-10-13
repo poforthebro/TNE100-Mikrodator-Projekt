@@ -34,7 +34,7 @@ class camera:
         ml_frame = cv2.cvtColor(ml_frame, cv2.COLOR_YUV2BGR_I420)
 
     # Flip both
-        # high_res_frame = cv2.flip(high_res_frame, 1) # Apparently not needed?
+        high_res_frame = cv2.flip(high_res_frame, 1)
         ml_frame = cv2.flip(ml_frame, 1)
 
         return(ml_frame, high_res_frame)
