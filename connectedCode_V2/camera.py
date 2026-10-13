@@ -11,7 +11,7 @@ class camera:
 
         # Configure the two different streams and their respective settings
         config = self.picam2.create_video_configuration(
-            main = {"format": "BGR888", "size": (streamResWidth, streamResHeight) }, 
+            main = {"format": "RGB888", "size": (streamResWidth, streamResHeight) }, 
             lores = {"format": "YUV420", "size": (MLresWidth, MLresHeight) }
         )
 
