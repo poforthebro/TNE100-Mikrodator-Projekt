@@ -7,7 +7,7 @@ class display:
         self.scale_y = scale_y
 
 
-    def display_frame(self, high_res_frame, faces, quality, delta):
+    def display_frame(self, high_res_frame, faces, quality, delta, gesture, res):
         if faces is not None: # Check that there is a face available
             best_face = faces[0]
             best_face_coord = [int(coord) for coord in best_face[:4]]
@@ -23,8 +23,7 @@ class display:
 
 
             score = int(quality)
-            cv2.putText(high_res_frame, f"Score: {score}", (int(best_face_coord[0] * self.scale_x), int( (best_face_coord[1] - 10) * self.scale_y) ), 
-            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(high_res_frame, f"Score: {score}", (int(best_face_coord[0] * self.scale_x), int( (best_face_coord[1] - 10) * self.scale_y) ), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
             draw_circle_face(high_res_frame, best_face_coord, self.scale_x, self.scale_y)
 
@@ -32,6 +31,8 @@ class display:
             for face in faces: # Loop through alla faces
                 draw_rectangle(high_res_frame, face, self.scale_x, self.scale_y)
 
+        if gesture:
+            write_gesture(high_res_frame, gesture, res)
 
 
         cv2.imshow('FATTIG ansiktsspårning', high_res_frame)
@@ -71,3 +72,8 @@ def draw_circle_face(frame, coordinates, scale_x, scale_y):
 
     centerOfCircle = (big_x, big_y) 
     image = cv2.circle(frame, centerOfCircle, radius = 10, color = (0, 0, 255), thickness = -1)
+
+
+def write_gesture(frame, gesture, res):
+            # draw gesture
+    cv2.putText(frame, f"Gesture: {gesture}", (res[0] - 50, res[1] - 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)

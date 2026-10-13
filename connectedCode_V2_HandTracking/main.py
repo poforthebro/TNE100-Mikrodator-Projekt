@@ -27,8 +27,8 @@ scale_x = streamResWidth / MLresWidth
 scale_y = streamResHeight / MLresHeight
 
 # Machine Learning Quality factor for face tracking
-ML_Q = 0.3
-Q_factor_threshold = 900
+ML_Q = 0.4
+Q_factor_threshold = 1200
 
 
 ########    Classes used      ########### 
@@ -56,11 +56,9 @@ while True:
     active_quality = [0]
     deltaArray = (0, 0)
 
-    if frame_count % 2 == 0:
-        # run face tracker
-        faces, quality = face_tracker.get_faces(frames[0])
+    faces, quality = face_tracker.get_faces(frames[0])
 
-    if frame_count % 2 != 0:
+    if frame_count % 3 == 0:
         # Run hand tracker
         palms, hands = hand_tracker.getHandCoordinates(frames[0])
         
@@ -68,22 +66,6 @@ while True:
 
     frame_count += 1 # Increase frame count
 
-    '''
-    # Example code for testing. remove
-    print("Hands: ")
-    for hand in hands:
-        for entry in hand:
-            print(entry)
-
-
-    print("palms: ")
-    for palm in palms:
-            for entry in palm:
-                print(entry)
-    
-    '''
-    # Figure out hand sign / whatever, not finished
-   # gesture = getGesture(palms, hands)
 
     if faces is not None:
         best_face = faces[0] # The face vector is sorted based on quality already, The first one is the best
@@ -98,20 +80,17 @@ while True:
 
 # ________________ Hand Tracking __________________ #
     # Hand tracking code:
+    # If hands is not none or 0
     if hands:
-        best_hand = hands[0] # This is now safely a 21x3 array!
-        gesture = gestureTracker.getGesture(best_hand)
+        best_hand = hands[0] # Hands is sorted and the best hand will be the first one
+        gesture = gestureTracker.getGesture(best_hand) # Find the gesture the first hand is doing
         
         print("Current Gesture: ") 
         print(gesture)
 
 
-    # add to draw a rectangle around the best hand
-    display1.display_frame(frames[1], faces, active_quality[0], deltaArray)
+    # Format and display frame
+    display1.display_frame(frames[1], faces, active_quality[0], deltaArray, gesture, (streamResWidth, streamResHeight))
 
     if cv2.waitKey(5) & 0xFF == 27:
             break
-
-# Do we need to add this line somewhere? Maybe in delta function
-            # This line sends the delta values to the action.py file
-#            on_target_update(delta[0], delta[1])
