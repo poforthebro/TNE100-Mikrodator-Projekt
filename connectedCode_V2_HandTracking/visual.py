@@ -18,13 +18,13 @@ class display:
 
             # Put the delta text in left top corner
             cv2.putText(high_res_frame, f"Delta X: {delta[0]}, Delta Y: {delta[1]}", (10, 30), 
-                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2) # Use font hershey with color green
+                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2) # Use font hershey with color green
         
 
 
 
             score = int(quality)
-            cv2.putText(high_res_frame, f"Score: {score}", (int(best_face_coord[0] * self.scale_x), int( (best_face_coord[1] - 10) * self.scale_y) ), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            cv2.putText(high_res_frame, f"Score: {score}", (int(best_face_coord[0] * self.scale_x), int( (best_face_coord[1] - 10) * self.scale_y) ), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
 
             draw_circle_face(high_res_frame, best_face_coord, self.scale_x, self.scale_y)
 
@@ -77,4 +77,4 @@ def draw_circle_face(frame, coordinates, scale_x, scale_y):
 
 def write_gesture(frame, gesture, res):
             # draw gesture
-    cv2.putText(frame, f"Gesture: {gesture}", (200, 600), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    cv2.putText(frame, f"Gesture: {gesture}", (50, 600), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
